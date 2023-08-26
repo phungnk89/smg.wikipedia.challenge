@@ -7,6 +7,8 @@
         public static string linkLogin = "#pt-login-2";
         public static string linkLogout = "#pt-logout";
         public static string labelUsername = "//*[@id='pt-userpage-2']//span";
+        public static string liSuggestion = "//*[contains(@id,'cdx-menu-item')][last()]//strong";
         public static string iconUserDoprdown = "#vector-user-links-dropdown-checkbox";
+        public static string headerTitle = "//*[@id='firstHeading']/*";
     }
 }

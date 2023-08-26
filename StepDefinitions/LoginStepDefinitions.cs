@@ -6,6 +6,7 @@ using OpenQA.Selenium.Support.UI;
 using SMG.Wikipedia.Challenge.Support;
 using SMG.Wikipedia.Elements;
 using System;
+using System.Data;
 using TechTalk.SpecFlow;
 
 namespace SMG.Wikipedia.Challenge.StepDefinitions
@@ -16,6 +17,8 @@ namespace SMG.Wikipedia.Challenge.StepDefinitions
         private IWebDriver driver;
         private WebDriverWait wait;
         private WebHelper helper;
+        private DataHelper dataHelper;
+        private DataTable userData;
         private IConfiguration configuration;
         private string tempPassword = string.Empty;
 
@@ -25,6 +28,7 @@ namespace SMG.Wikipedia.Challenge.StepDefinitions
             wait = (WebDriverWait)context["wait"];
             configuration = (IConfiguration)context["configuration"];
             helper = (WebHelper)context["webhelper"];
+            dataHelper = (DataHelper)context["datahelper"];
         }
 
         [When(@"I navigate back to Wikipedia Main Page")]
@@ -40,8 +44,6 @@ namespace SMG.Wikipedia.Challenge.StepDefinitions
         public void ThenTheWikipediaMainPageShouldDisplay()
         {
             By element = By.XPath(MainPage.txtSearch);
-
-            //wait.Until(drv => drv.FindElement(element));
 
             Assert.IsTrue(helper.IsElementPresent(element), "Main Page does not show!");
         }
@@ -61,8 +63,6 @@ namespace SMG.Wikipedia.Challenge.StepDefinitions
             By txtPassword = By.CssSelector(LoginPage.txtPassword);
             By btnLogin = By.CssSelector(LoginPage.btnLogin);
 
-            //wait.Until(drv => drv.FindElement(txtUsername));
-
             Assert.IsTrue(helper.IsElementPresent(txtUsername), "Username field does not show!");
             Assert.IsTrue(helper.IsElementPresent(txtPassword), "Password field does not show!");
             Assert.IsTrue(helper.IsElementPresent(btnLogin), "Button login does not show!");
@@ -71,14 +71,13 @@ namespace SMG.Wikipedia.Challenge.StepDefinitions
         [When(@"I input valid account")]
         public void WhenIInputValidAccount()
         {
-            var user = configuration["account:user"];
-            var password = configuration["account:password"];
+            userData = dataHelper.LoadCSV("user-data.csv");
 
             By txtUsername = By.CssSelector(LoginPage.txtUsername);
-            By txtPassword = By.CssSelector(LoginPage.txtPassword); 
+            By txtPassword = By.CssSelector(LoginPage.txtPassword);
 
-            driver.FindElement(txtUsername).SendKeys(user);
-            driver.FindElement(txtPassword).SendKeys(password);
+            driver.FindElement(txtUsername).SendKeys(userData.Rows[0][0].ToString());
+            driver.FindElement(txtPassword).SendKeys(userData.Rows[0][1].ToString());
         }
 
         [When(@"I click Login button")]
@@ -92,11 +91,9 @@ namespace SMG.Wikipedia.Challenge.StepDefinitions
         [Then(@"the Main Page should display with my username on top")]
         public void ThenTheMainPageShouldDisplayWithMyUsernameOnTop()
         {
-            var user = configuration["account:user"];
-
             By element = By.XPath(MainPage.labelUsername);
 
-            Assert.That(helper.GetElementText(element), Contains.Substring(user), "Current user does not show on top!");
+            Assert.That(helper.GetElementText(element), Contains.Substring(userData.Rows[0][0].ToString()), "Current user does not show on top!");
         }
 
         [When(@"I click Forgot Password link")]
@@ -120,14 +117,11 @@ namespace SMG.Wikipedia.Challenge.StepDefinitions
         [When(@"I input valid username and email")]
         public void WhenIInputValidUsernameAndEmail()
         {
-            var user = configuration["account:user"];
-            var email = configuration["account:mail"];
-
             By txtUsername = By.XPath(ForgotPasswordPage.txtUsername);
             By txtEmail = By.XPath(ForgotPasswordPage.txtEmail);
 
-            driver.FindElement(txtUsername).SendKeys(user);
-            driver.FindElement(txtEmail).SendKeys(email);
+            driver.FindElement(txtUsername).SendKeys(userData.Rows[0][0].ToString());
+            driver.FindElement(txtEmail).SendKeys(userData.Rows[0][2].ToString());
         }
 
         [When(@"I click Reset Password button")]
@@ -150,13 +144,12 @@ namespace SMG.Wikipedia.Challenge.StepDefinitions
         public void WhenICheckMyMailbox()
         {
             var url = "https://yopmail.com/en/";
-            var mail = configuration["account:mail"];
 
             By txtEmail = By.CssSelector(YopMailPage.txtEmail);
             By btnRefresh = By.CssSelector(YopMailPage.btnRefresh);
 
             driver.Navigate().GoToUrl(url);
-            driver.FindElement(txtEmail).SendKeys(mail);
+            driver.FindElement(txtEmail).SendKeys(userData.Rows[0][2].ToString());
             driver.FindElement(btnRefresh).Click();
         }
 
@@ -202,13 +195,11 @@ namespace SMG.Wikipedia.Challenge.StepDefinitions
         [When(@"I login with the temporary password")]
         public void WhenILoginWithTheTemporaryPassword()
         {
-            var user = configuration["account:user"];
-
             By txtUsername = By.CssSelector(LoginPage.txtUsername);
             By txtPassword = By.CssSelector(LoginPage.txtPassword);
             By btnLogin = By.CssSelector(LoginPage.btnLogin);
 
-            driver.FindElement(txtUsername).SendKeys(user);
+            driver.FindElement(txtUsername).SendKeys(userData.Rows[0][0].ToString());
             driver.FindElement(txtPassword).SendKeys(tempPassword);
             driver.FindElement(btnLogin).Click();
         }
@@ -226,13 +217,11 @@ namespace SMG.Wikipedia.Challenge.StepDefinitions
         [When(@"I input my new password")]
         public void WhenIInputMyNewPassword()
         {
-            var password = configuration["account:password"];
-
             By txtNewPassword = By.CssSelector(LoginPage.txtNewPassword);
             By txtRetypePassword = By.CssSelector(LoginPage.txtRetypePassword);
 
-            driver.FindElement(txtNewPassword).SendKeys(password);
-            driver.FindElement(txtRetypePassword).SendKeys(password);
+            driver.FindElement(txtNewPassword).SendKeys(userData.Rows[0][1].ToString());
+            driver.FindElement(txtRetypePassword).SendKeys(userData.Rows[0][1].ToString());
         }
 
         [When(@"I click Continue Login button")]

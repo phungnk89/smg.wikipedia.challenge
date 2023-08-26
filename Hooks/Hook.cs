@@ -20,6 +20,7 @@ namespace SMG.Wikipedia.Challenge.Hooks
         private IConfiguration _configuration;
         private WebDriverWait _wait;
         private WebHelper _webHelper;
+        private DataHelper _dataHelper;
         private string imagePath = string.Empty;
 
         public Hook(ISpecFlowOutputHelper helper)
@@ -46,17 +47,7 @@ namespace SMG.Wikipedia.Challenge.Hooks
 
             if (bool.Parse(_configuration["headless"]))
             {
-                string userName = WindowsIdentity.GetCurrent().Name.Split('\\')[1];
-                string dir = string.Format(@"c:\Users\{0}\Downloads", userName);
-
                 options.AddArguments("--headless");
-                options.AddUserProfilePreference("download.default_directory", dir);
-                options.AddUserProfilePreference("download.prompt_for_download", true);
-                options.AddUserProfilePreference("download.directory_upgrade", true);
-                options.AddUserProfilePreference("download.prompt_for_download", false);
-                options.AddUserProfilePreference("safebrowsing.enabled", false);
-                options.AddUserProfilePreference("safebrowsing.disable_download_protection", true);
-                options.AddUserProfilePreference("profile.default_content_setting_values.automatic_downloads", true);
             }
 
             _driver = new EdgeDriver(EdgeDriverService.CreateDefaultService(), options, TimeSpan.FromSeconds(30));
@@ -65,10 +56,13 @@ namespace SMG.Wikipedia.Challenge.Hooks
 
             _webHelper = new WebHelper() { driver = _driver };
 
+            _dataHelper = new DataHelper();
+
             context["driver"] = _driver;
             context["wait"] = _wait;
             context["configuration"] = _configuration;
             context["webhelper"] = _webHelper;
+            context["datahelper"] = _dataHelper;
         }
 
         [AfterScenario]
@@ -80,6 +74,7 @@ namespace SMG.Wikipedia.Challenge.Hooks
             context.Remove("wait");
             context.Remove("configuration");
             context.Remove("webhelper");
+            context.Remove("datahelper");
         }
 
         [BeforeStep]
