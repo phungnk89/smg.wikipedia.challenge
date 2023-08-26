@@ -1,14 +1,12 @@
 ﻿using Microsoft.Extensions.Configuration;
 using OpenQA.Selenium;
-using TechTalk.SpecFlow;
-using TechTalk.SpecFlow.Infrastructure;
-using System.IO;
-using WebDriverManager;
-using WebDriverManager.DriverConfigs.Impl;
 using OpenQA.Selenium.Edge;
-using System.Security.Principal;
 using OpenQA.Selenium.Support.UI;
 using SMG.Wikipedia.Challenge.Support;
+using TechTalk.SpecFlow;
+using TechTalk.SpecFlow.Infrastructure;
+using WebDriverManager;
+using WebDriverManager.DriverConfigs.Impl;
 
 namespace SMG.Wikipedia.Challenge.Hooks
 {

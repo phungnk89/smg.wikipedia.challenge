@@ -2,12 +2,7 @@
 using OpenQA.Selenium.Support.Extensions;
 using OpenQA.Selenium.Support.UI;
 using SMG.Wikipedia.Elements;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using TechTalk.SpecFlow;
 
 namespace SMG.Wikipedia.Challenge.Support

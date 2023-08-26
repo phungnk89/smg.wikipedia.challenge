@@ -5,7 +5,6 @@ using OpenQA.Selenium.Edge;
 using OpenQA.Selenium.Support.UI;
 using SMG.Wikipedia.Challenge.Support;
 using SMG.Wikipedia.Elements;
-using System;
 using TechTalk.SpecFlow;
 
 namespace SMG.Wikipedia.Challenge.StepDefinitions

@@ -5,7 +5,6 @@ using OpenQA.Selenium.Edge;
 using OpenQA.Selenium.Support.UI;
 using SMG.Wikipedia.Challenge.Support;
 using SMG.Wikipedia.Elements;
-using System;
 using System.Data;
 using TechTalk.SpecFlow;
 
@@ -29,6 +28,7 @@ namespace SMG.Wikipedia.Challenge.StepDefinitions
             configuration = (IConfiguration)context["configuration"];
             helper = (WebHelper)context["webhelper"];
             dataHelper = (DataHelper)context["datahelper"];
+            userData = dataHelper.LoadCSV("user-data.csv");
         }
 
         [When(@"I navigate back to Wikipedia Main Page")]
@@ -71,8 +71,6 @@ namespace SMG.Wikipedia.Challenge.StepDefinitions
         [When(@"I input valid account")]
         public void WhenIInputValidAccount()
         {
-            userData = dataHelper.LoadCSV("user-data.csv");
-
             By txtUsername = By.CssSelector(LoginPage.txtUsername);
             By txtPassword = By.CssSelector(LoginPage.txtPassword);
 

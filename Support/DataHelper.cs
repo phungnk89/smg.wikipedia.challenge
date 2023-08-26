@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using LumenWorks.Framework.IO.Csv;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using LumenWorks.Framework.IO.Csv;
 
 namespace SMG.Wikipedia.Challenge.Support
 {
